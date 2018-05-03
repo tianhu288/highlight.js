@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<title>Title</title>
+
+<style>body {width: 500px;}</style>
+
+<script type="application/javascript">
+  function $init() {return true;}
+</script>
+
+<body>
+  <p checked class="title" id='title'>Title</p>
+
+  <#var param1 = "1"/>
+  <#var param2 = "2"/>
+  <#function functionName()>
+    <div>param1 = 1</div>
+  </#function>
+  <#if aaaaaaa != 1>
+    <#var ret = 1 + 2/>
+    <#continue/>
+  </#if>
+  <#for (var item : list)>
+    <#if (Validates.isNotEmpty(item))>
+        ${item}
+    </#if>
+  </#for>
+  ${item}
+  @{System.out.println("显示信息到控制台，不是显示到页面")}
+  ${Strings.trimLeft("abc", "a")}
+  #{name + "模板引擎"}
+  <!-- here goes the rest of the page -->
+</body>
