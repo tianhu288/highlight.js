@@ -1,18 +1,27 @@
 /**
  * Zhiqim Studio Theme
- * Author : Louis Barranqueiro - https://github.com/LouisBarranqueiro
+ * Author : tianhu288 - https://github.com/tianhu288
  */
 
+pre {
+    border-radius: 0;
+    padding: 5px;
+    margin-top: -1px;
+    border-color: #e3e9ed;
+    background: #fff;
+}
+
 .hljs {
-  display: block;
-  background: white;
-  padding: 0.5em;
-  color: #000000;
-  overflow-x: auto;
+    display: block;
+    background: white;
+    padding: 6px 0;
+    color: #000000;
+    overflow-x: auto;
+    line-height: 18px;
 }
 
 .hljs-comment {
-  color: #808080;
+    color: #808080;
 }
 
 .hljs-string,
@@ -23,31 +32,31 @@
 .hljs-quote,
 .hljs-zmlSetTag,
 .hljs-zmlSetTag .hljs-name {
-  color: #0000ff;
+    color: #0000ff;
 }
 
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-type {
-  color: #a71d5d;
+    color: #a71d5d;
 }
 
-.hljs-keyword{
-  font-weight:700;
+.hljs-keyword {
+    font-weight: 700;
 }
 
 .hljs-literal,
 .hljs-symbol,
 .hljs-bullet,
 .hljs-attribute {
-  color: #0086b3;
+    color: #0086b3;
 }
 
 .hljs-meta,
 .hljs-section,
 .hljs-tag,
 .hljs-name {
-  color: #008080;
+    color: #008080;
 }
 
 .hljs-title,
@@ -57,28 +66,51 @@
 .hljs-selector-attr,
 .hljs-selector-pseudo,
 .hljs-zmlReTag {
-  color: #7f0055;
+    color: #7f0055;
 }
 
 .hljs-addition {
-  color: #55a532;
-  background-color: #eaffea;
+    color: #55a532;
+    background-color: #eaffea;
 }
 
 .hljs-deletion {
-  color: #bd2c00;
-  background-color: #ffecec;
+    color: #bd2c00;
+    background-color: #ffecec;
 }
 
 .hljs-link {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .hljs-zmlGetTag .hljs-string,
-.hljs-zmlSetTag .hljs-string{
-  color: #008080;
-}
-.hljs-zmlGetTag{
-  color: #cc3352;
+.hljs-zmlSetTag .hljs-string {
+    color: #008080;
 }
 
+.hljs-zmlGetTag {
+    color: #cc3352;
+}
+
+.hljs-line {
+    height: 18px;
+    line-height: 18px;
+    white-space: nowrap;
+    padding-left: 50px;
+    position: relative;
+}
+
+.hljs-line > .lineNum {
+    position: absolute;
+    font-style: normal;
+    min-width: 40px;
+    height: 18px;
+    left: 0;
+    top: 0;
+    font-size: 12px;
+    text-align: right;
+    padding: 0 10px 0 5px;
+    color: #999;
+    font-family: Consolas, "Liberation Mono", Courier, monospace !important;
+    /*border-right:1px solid #e3e9ed;*/
+}
