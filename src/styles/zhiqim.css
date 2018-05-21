@@ -100,7 +100,7 @@ pre {
     position: relative;
 }
 
-.hljs-line > .lineNum {
+.hljs-line > .hljs-index {
     position: absolute;
     font-style: normal;
     min-width: 40px;

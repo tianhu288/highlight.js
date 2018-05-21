@@ -426,8 +426,8 @@ https://highlightjs.org/
             if (isNewline){
                 for (var i = 0;i < buffer.length;i++){
                     if (buffer[i] == "\n") {
-                        result += '</div><div class="hljs-line"><i class="lineNum">'+hljs.lineNum+'</i>';
-                        hljs.lineNum++;
+                        result += '</div><div class="hljs-line"><i class="hljs-index">'+hljs.lineIndex+'</i>';
+                        hljs.lineIndex++;
                     } else {
                         result += buffer[i]
                     }
@@ -523,9 +523,9 @@ https://highlightjs.org/
         compileLanguage(language);
         var top = continuation || language;
         var continuations = {}; // keep continuations for sub-languages
-        hljs.lineNum = 0;
-        var result = '<div class="hljs-line"><i class="lineNum">'+hljs.lineNum+'</i>', current;
-        hljs.lineNum++;
+        hljs.lineIndex = 0;
+        var result = '<div class="hljs-line"><i class="hljs-index">'+hljs.lineIndex+'</i>', current;
+        hljs.lineIndex++;
         for (current = top; current !== language; current = current.parent) {
             if (current.className) {
                 result = buildSpan(current.className, '', true) + result;
