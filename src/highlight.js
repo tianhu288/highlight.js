@@ -426,10 +426,13 @@ https://highlightjs.org/
             if (isNewline){
                 for (var i = 0;i < buffer.length;i++){
                     if (buffer[i] == "\n") {
-                        result += '</div><div class="hljs-line"><i class="hljs-index">'+hljs.lineIndex+'</i>';
+                        result += '</div><div class="'+options.classPrefix+'line"><i class="'+options.classPrefix+'index">'+hljs.lineIndex+'</i>';
                         hljs.lineIndex++;
+                        if (i != buffer.length - 1) {
+                            result += "&nbsp;";
+                        }
                     } else {
-                        result += buffer[i]
+                        result += buffer[i];
                     }
                 }
                 if (last) {
@@ -524,7 +527,7 @@ https://highlightjs.org/
         var top = continuation || language;
         var continuations = {}; // keep continuations for sub-languages
         hljs.lineIndex = 0;
-        var result = '<div class="hljs-line"><i class="hljs-index">'+hljs.lineIndex+'</i>', current;
+        var result = '<div class="'+options.classPrefix+'line"><i class="'+options.classPrefix+'index">'+hljs.lineIndex+'</i>', current;
         hljs.lineIndex++;
         for (current = top; current !== language; current = current.parent) {
             if (current.className) {
