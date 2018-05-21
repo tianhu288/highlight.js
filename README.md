@@ -1,3 +1,10 @@
+## 修改内容
+### 添加自定义文档
+#### 添加文件：src/languages/zml.js
+#### 添加文件：src/styles/zml.css
+### 添加行号显示
+#### 修改文件：src/highlight.js
+
 # Highlight.js
 
 [![Build Status](https://travis-ci.org/isagalaev/highlight.js.svg?branch=master)](https://travis-ci.org/isagalaev/highlight.js)
