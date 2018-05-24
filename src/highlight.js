@@ -421,26 +421,8 @@ https://highlightjs.org/
             return buildSpan(result.language, result.value, false, true);
         }
 
-        function processBuffer(buffer, last) {
-            var isNewline = buffer && buffer.match(/\n+/);
-            if (isNewline){
-                for (var i = 0;i < buffer.length;i++){
-                    if (buffer[i] == "\n") {
-                        result += '</div><div class="'+options.classPrefix+'line"><i class="'+options.classPrefix+'index">'+hljs.lineIndex+'</i>';
-                        hljs.lineIndex++;
-                        if (i != buffer.length - 1) {
-                            result += "&nbsp;";
-                        }
-                    } else {
-                        result += buffer[i];
-                    }
-                }
-                if (last) {
-                    result += '</div>';
-                }
-            } else {
-                result += (top.subLanguage != null ? processSubLanguage() : processKeywords());
-            }
+        function processBuffer() {
+            result += (top.subLanguage != null ? processSubLanguage() : processKeywords());
             mode_buffer = '';
         }
 
@@ -454,7 +436,7 @@ https://highlightjs.org/
             mode_buffer += buffer;
 
             if (lexeme == null) {
-                processBuffer(buffer, true);
+                processBuffer();
                 return 0;
             }
 
@@ -466,8 +448,7 @@ https://highlightjs.org/
                     if (new_mode.excludeBegin) {
                         mode_buffer += lexeme;
                     }
-                    processBuffer(buffer);
-
+                    processBuffer();
                     if (!new_mode.returnBegin && !new_mode.excludeBegin) {
                         mode_buffer = lexeme;
                     }
@@ -485,8 +466,7 @@ https://highlightjs.org/
                     if (!(origin.returnEnd || origin.excludeEnd)) {
                         mode_buffer += lexeme;
                     }
-                    processBuffer(buffer);
-
+                    processBuffer();
                     if (origin.excludeEnd) {
                         mode_buffer = lexeme;
                     }
@@ -526,9 +506,7 @@ https://highlightjs.org/
         compileLanguage(language);
         var top = continuation || language;
         var continuations = {}; // keep continuations for sub-languages
-        hljs.lineIndex = 0;
-        var result = '<div class="'+options.classPrefix+'line"><i class="'+options.classPrefix+'index">'+hljs.lineIndex+'</i>', current;
-        hljs.lineIndex++;
+        var result = '', current;
         for (current = top; current !== language; current = current.parent) {
             if (current.className) {
                 result = buildSpan(current.className, '', true) + result;
