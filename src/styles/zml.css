@@ -20,10 +20,6 @@ pre {
     line-height: 18px;
 }
 
-.hljs-comment {
-    color: #808080;
-}
-
 .hljs-string,
 .hljs-variable,
 .hljs-template-variable,
@@ -112,5 +108,20 @@ pre {
     padding: 0 10px 0 5px;
     color: #999;
     font-family: Consolas, "Liberation Mono", Courier, monospace !important;
+    user-select: none;
     /*border-right:1px solid #e3e9ed;*/
+}
+.hljs-comment {
+    color: #3f7f5f;
+}
+
+.hljs.css .hljs-selector-id,
+.hljs.css .hljs-selector-class,
+.hljs.css .hljs-selector-attr,
+.hljs.css .hljs-selector-pseudo,
+.hljs.css .hljs-selector-tag {
+    color: #000000;
+}
+.hljs.css .hljs-attribute{
+    color: #7f0055;
 }

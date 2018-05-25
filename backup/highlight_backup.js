@@ -227,7 +227,6 @@ https://highlightjs.org/
         return mode.cached_variants || (mode.endsWithParent && [inherit(mode)]) || [mode];
     }
 
-    // 重构 mode.keywords / language.keywords / class 的 start、end
     function compileLanguage(language) {
 
         function reStr(re) {
@@ -251,7 +250,6 @@ https://highlightjs.org/
                 var compiled_keywords = {};
 
                 var flatten = function (className, str) {
-                    // 大小写不敏感
                     if (language.case_insensitive) {
                         str = str.toLowerCase();
                     }
@@ -312,8 +310,6 @@ https://highlightjs.org/
                     .concat([mode.terminator_end, mode.illegal])
                     .map(reStr)
                     .filter(Boolean);
-
-            // 开始、结束标识
             mode.terminators = terminators.length ? langRe(terminators.join('|'), true) : {
                 exec: function (/*s*/) {
                     return null;
@@ -335,23 +331,6 @@ https://highlightjs.org/
     */
     function highlight(name, value, ignore_illegals, continuation) {
 
-        // 设置行号
-        function setLineNumber(buffer, lexeme, result){
-            for (var i = 0;i < buffer.length;i++){
-                if (buffer[i] == "\n") {
-                    result += '</div><div class="'+options.classPrefix+'line"><i class="'+options.classPrefix+'index">'+hljs.lineNumber+'</i>';
-                    hljs.lineNumber++;
-                    if (mode_buffer[i+1] && mode_buffer[i+1] == "\n") {
-                        result += "&nbsp;";
-                    }
-                } else {
-                    result += escape(buffer[i]);
-                }
-            }
-            return result;
-        }
-
-        // 查找开始匹配的 mode / 标签
         function subMode(lexeme, mode) {
             var i, length;
 
@@ -362,7 +341,6 @@ https://highlightjs.org/
             }
         }
 
-        // 查找结束匹配的 mode / 标签
         function endOfMode(mode, lexeme) {
             if (testRe(mode.endRe, lexeme)) {
                 while (mode.endsParent && mode.parent) {
@@ -394,46 +372,19 @@ https://highlightjs.org/
             return openSpan + insideSpan + closeSpan;
         }
 
-        function processKeywords(mode, lexeme) {
-            var keyword_match, last_index, match, result, temp_buffer, i;
-            result = "";
+        function processKeywords() {
+            var keyword_match, last_index, match, result;
 
-            // 统一样式内容 / 匹配的结束项
-            if (!top.keywords) {
-                if(mode_buffer.match(/\n+/)) {
-                    for (i = 0; i < mode_buffer.length; i++) {
-                        if (mode_buffer[i] == "\n") {
-                            result += spanEndTag + '</div><div class="' + options.classPrefix + 'line"><i class="' + options.classPrefix + 'index">' + hljs.lineNumber + '</i>';
-                            result += buildSpan(mode.className, "", true);
-                            if (mode_buffer[i+1] && mode_buffer[i+1] == "\n") {
-                                result += "&nbsp;";
-                            }
-                            hljs.lineNumber++;
-                        } else {
-                            result += escape(mode_buffer[i]);
-                        }
-                    }
-                    //result += (lexeme == null)?"</div>":lexeme;
-                    return result;
-                }
-                if(lexeme == null)
-                    return escape(mode_buffer) + "</div>";
+            if (!top.keywords)
                 return escape(mode_buffer);
-            }
 
-            // 匹配的开始项
+            result = '';
             last_index = 0;
             top.lexemesRe.lastIndex = 0;
             match = top.lexemesRe.exec(mode_buffer);
 
             while (match) {
-                temp_buffer = mode_buffer.substring(last_index, match.index);
-                if (temp_buffer.match(/\n+/)) {
-                    result = setLineNumber(temp_buffer, lexeme, result);
-                } else {
-                    result += escape(mode_buffer.substring(last_index, match.index));
-                }
-
+                result += escape(mode_buffer.substring(last_index, match.index));
                 keyword_match = keywordMatch(top, match);
                 if (keyword_match) {
                     relevance += keyword_match[1];
@@ -444,17 +395,7 @@ https://highlightjs.org/
                 last_index = top.lexemesRe.lastIndex;
                 match = top.lexemesRe.exec(mode_buffer);
             }
-
-            temp_buffer = mode_buffer.substr(last_index);
-            if (temp_buffer.match(/\n+/)) {
-                result = setLineNumber(temp_buffer, lexeme, result);
-            } else {
-                result += escape(mode_buffer.substr(last_index));
-            }
-
-            if(lexeme == null)
-                result += "</div>";
-            return result;
+            return result + escape(mode_buffer.substr(last_index));
         }
 
         function processSubLanguage() {
@@ -480,8 +421,8 @@ https://highlightjs.org/
             return buildSpan(result.language, result.value, false, true);
         }
 
-        function processBuffer(mode, lexeme) {
-            result += (top.subLanguage != null ? processSubLanguage() : processKeywords(mode, lexeme));
+        function processBuffer() {
+            result += (top.subLanguage != null ? processSubLanguage() : processKeywords());
             mode_buffer = '';
         }
 
@@ -495,11 +436,10 @@ https://highlightjs.org/
             mode_buffer += buffer;
 
             if (lexeme == null) {
-                processBuffer(top, buffer, lexeme);
+                processBuffer();
                 return 0;
             }
 
-            // 查找开始匹配项 new_mode
             var new_mode = subMode(lexeme, top);
             if (new_mode) {
                 if (new_mode.skip) {
@@ -508,7 +448,7 @@ https://highlightjs.org/
                     if (new_mode.excludeBegin) {
                         mode_buffer += lexeme;
                     }
-                    processBuffer(new_mode, buffer, lexeme);
+                    processBuffer();
                     if (!new_mode.returnBegin && !new_mode.excludeBegin) {
                         mode_buffer = lexeme;
                     }
@@ -517,7 +457,6 @@ https://highlightjs.org/
                 return new_mode.returnBegin ? 0 : lexeme.length;
             }
 
-            // 查找结束匹配项 end_mode
             var end_mode = endOfMode(top, lexeme);
             if (end_mode) {
                 var origin = top;
@@ -527,7 +466,7 @@ https://highlightjs.org/
                     if (!(origin.returnEnd || origin.excludeEnd)) {
                         mode_buffer += lexeme;
                     }
-                    processBuffer(end_mode, buffer, lexeme);
+                    processBuffer();
                     if (origin.excludeEnd) {
                         mode_buffer = lexeme;
                     }
@@ -559,25 +498,15 @@ https://highlightjs.org/
             return lexeme.length || 1;
         }
 
-        // 获取代码类型
         var language = getLanguage(name);
         if (!language) {
             throw new Error('Unknown language: "' + name + '"');
         }
 
-        // 重构 language.keywords / class 的 start、end
         compileLanguage(language);
-
-        // 定义代码字符串 result
         var top = continuation || language;
         var continuations = {}; // keep continuations for sub-languages
         var result = '', current;
-        hljs.lineNumber = hljs.lineNumber || 1;
-        if (hljs.lineNumber != 1) {
-            result += '</div>';
-        }
-        result += '<div class="'+options.classPrefix+'line"><i class="'+options.classPrefix+'index">'+hljs.lineNumber+'</i>';
-        hljs.lineNumber++;
         for (current = top; current !== language; current = current.parent) {
             if (current.className) {
                 result = buildSpan(current.className, '', true) + result;
@@ -585,13 +514,10 @@ https://highlightjs.org/
         }
         var mode_buffer = '';
         var relevance = 0;
-
-        // 字符串处理
         try {
             var match, count, index = 0;
             while (true) {
                 top.terminators.lastIndex = index;
-                // 匹配开始、结束标识
                 match = top.terminators.exec(value);
                 if (!match)
                     break;
@@ -640,9 +566,7 @@ https://highlightjs.org/
             value: escape(text)
         };
         var second_best = result;
-        var hljs_lineNumber = hljs.lineNumber || 1;
         languageSubset.filter(getLanguage).forEach(function (name) {
-            hljs.lineNumber = hljs_lineNumber;
             var current = highlight(name, text, false);
             current.language = name;
             if (current.relevance > second_best.relevance) {

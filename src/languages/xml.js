@@ -32,9 +32,9 @@ function(hljs) {
             }
         ]
     };
-    var ZML_IDENT_SET = '<\/?#(var|function|include|if|for|interceptor)(?=\\s|>|$)';
+    var ZML_IDENT_SET = '<\/?#((var)|(def)|(function)|(include)|(if)|(for)|(interceptor))(?=\\s|>|$)';
     var ZML_IDENT_GET = '(\\$|#|@)\{';
-    var ZML_IDENT_RE = '<#(return|continue|break)(?=\\s|\/|$)';
+    var ZML_IDENT_RE = '<#((return)|(continue)|(break))(?=\\s|\/|$)';
     return {
         aliases: ['zml', 'html', 'xhtml', 'rss', 'atom', 'xjb', 'xsd', 'xsl', 'plist'],
         case_insensitive: true,
