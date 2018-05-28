@@ -114,6 +114,9 @@ pre {
 .hljs-comment {
     color: #3f7f5f;
 }
+.hljs-zmlComment {
+    color: #aa0000;
+}
 
 .hljs.css .hljs-selector-id,
 .hljs.css .hljs-selector-class,

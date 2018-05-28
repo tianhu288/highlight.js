@@ -53,6 +53,11 @@ function(hljs) {
                 }
             ),
             {
+                className: 'zmlComment',
+                begin: '<#--', end: '-->',
+                relevance: 10
+            },
+            {
                 begin: '<\\!\\[CDATA\\[', end: '\\]\\]>',
                 relevance: 10
             },
