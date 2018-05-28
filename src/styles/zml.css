@@ -91,7 +91,7 @@ pre {
 .hljs-line {
     height: 18px;
     line-height: 18px;
-    white-space: nowrap;
+    white-space: pre;
     padding-left: 50px;
     position: relative;
 }
