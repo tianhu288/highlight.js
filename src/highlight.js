@@ -635,12 +635,26 @@ https://highlightjs.org/
     */
     function highlightAuto(text, languageSubset) {
         languageSubset = languageSubset || options.languages || objectKeys(languages);
+
+        var hljs_lineNumber = hljs.lineNumber || 1;
+        hljs.lineNumber = hljs_lineNumber;
+
+        // 为text添加行号
+        var html = '<div class="'+options.classPrefix+'line"><i class="'+options.classPrefix+'index">'+hljs.lineNumber+'</i>';
+        text.split("\n").forEach(function (line, index){
+            if (index > 0){
+                hljs.lineNumber++;
+                html += '</div><div class="'+options.classPrefix+'line"><i class="'+options.classPrefix+'index">'+hljs.lineNumber+'</i>';
+            }
+            html += escape(line);
+        })
+        html += '</div>';
+
         var result = {
             relevance: 0,
-            value: escape(text)
+            value: html
         };
         var second_best = result;
-        var hljs_lineNumber = hljs.lineNumber || 1;
         languageSubset.filter(getLanguage).forEach(function (name) {
             hljs.lineNumber = hljs_lineNumber;
             var current = highlight(name, text, false);
